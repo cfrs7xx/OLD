@@ -12,7 +12,7 @@ import shutil
 import regex
 from sys import platform as _platform
 
-debug = 0
+verbose = 0
 
 def IdentifyFile(filename):
     status = True
@@ -71,7 +71,7 @@ def main(argv):
         parser = argparse.ArgumentParser(description="Main program for MAFA.", add_help=True)
         parser.add_argument('-p', '--path', help='The output path for files.', required=True)
         parser.add_argument('-f', '--filename', help='The file to ingest.', required=True)
-        parser.add_argument('-d', '--debug', help='The level of debugging.', required=False)
+        parser.add_argument('-v', '--verbose', help='The level of debugging.', required=False)
         parser.add_argument('--version', action='version', version='%(prog)s 1.5')
         args = parser.parse_args()
         if args.path:
@@ -82,9 +82,9 @@ def main(argv):
                 shutil.rmtree(path)
         if args.filename:
             filename = args.filename
-        if args.debug:
-            debug = args.debug
-            debug = int(debug)
+        if args.verbose:
+            verbose = args.verbose
+            verbose = int(verbose)
         if _platform == "linux" or _platform == "linux2":
             oper = 'Linux'
         elif _platform == "darwin":
