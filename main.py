@@ -47,7 +47,7 @@ def Failed(error):
 def Header(outputpath, file):
     print('')
     print('+--------------------------------------------------------------------------+')
-    print('|File Carving Utility.                                                     |')
+    print('|Mobile Application and Analysis Framework                                 |')
     print('+---------------------------------------------------------------------------')
     print('|Authors: Tahir Khan - tkhan9@gmu.edu / Tim Schleining - tschlein@gmu.edu  |')
     print('+--------------------------------------------------------------------------+')
