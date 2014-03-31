@@ -1,5 +1,6 @@
-__author__ = 'khanta'
 __author__ = 'tschlein'
+#Checks for existence of dependencies (executable files, Python modules).
+#Returns True if all dependencies are present; otherwise, returns False and prints missing files.
 
 #TODO add Python modules
 
