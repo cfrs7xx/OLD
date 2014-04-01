@@ -70,14 +70,14 @@ def main(argv):
         parser = argparse.ArgumentParser(description="Check whether required programs and modules exist.",
                                          add_help=True)
         parser.add_argument('-f', '--file', help='The file that contains paths for the required programs and modules.', required=False)
-        parser.add_argument('-d', '--debug', help='The level of debugging.', type=int, required=False)
+        parser.add_argument('-v', '--verbose', help='The level of debugging.', type=int, required=False)
         parser.add_argument('--version', action='version', version='%(prog)s 0.5')
 
         args = parser.parse_args()
         if args.file:
             file = args.file
-        if args.debug:
-            debug = args.debug
+        if args.verbose:
+            debug = args.verbose
         if debug >= 1:
             print('Entering Main:')
 
