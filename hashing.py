@@ -5,19 +5,6 @@ __author__ = 'tschlein'
 #TODO add return with err to main, if determine to be required
 #TODO clean up formatting to comply with project semantics
 
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# Description:
-#	Calculate MD5 and SHA-1 hashes for a file or files.
-#
-#	-f | --file <file>          calculate hashes for single file
-#	-r | --recursive <path>		recursively hash files in path,
-#									top-down
-#	-h | --help 				syntax help
-#	
-# 	
-#	Currently written in Python 3.3.2
-#
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 import os					    #path, os.walk() for recursive walking of directories
 import fnmatch				    #used for file matching

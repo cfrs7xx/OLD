@@ -62,6 +62,7 @@ def parse(file, verbose):
     else:
         return True
 
+
 #Parse the command line arguments.
 def main(argv):
     try:
