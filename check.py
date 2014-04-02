@@ -12,14 +12,15 @@ import argparse     #http://docs.python.org/3.4/library/argparse.html
 
 
 #Parse the ini file to check whether dependencies are present.
-def parse(file):
-    if debug >= 1:
+def parse(file, verbose):
+
+    if verbose >= 1:
         print('Entering parse:')
-    if debug >= 2:
+    if verbose >= 2:
         print('\tConfig file passed in:' + str(file))
 
     #Declare list of missing executables and/or modules.
-    missing = []
+    missing = '|[-] Missing the following:'
 
     #Determine system: 'nt' for Windows, 'posix' for *nix, Mac OSX
     system = platform.platform()
@@ -37,25 +38,27 @@ def parse(file):
         for key in config['Windows']:
             value = config.get('Windows', key)
             if path.isfile(value):
-                if debug >= 2:
+                if verbose >= 2:
                     print('\t| [+]  ', value, '|')
             else:
-                print('\t| [-]  ', value, '|')
-                missing.append(value)
+                print('\t| [-] ', value, '|')
+                missing += '\n| [-]:   '
+                missing += value
 
     elif 'Linux' in system:
         for key in config['Linux']:
             value = config.get('Linux', key)
             if path.isfile(value):
-                if debug >= 2:
-                    print('\t| [+]  ', value, '|')
+                if verbose >= 2:
+                    print('\t [+]  ', value, '|')
             else:
-                print('\t| [-]  ', value, '|')
-                missing.append(value)
+                print('\t| [-] ', value, '|')
+                missing += '\n| [-]:   '
+                missing += value
 
     #Return True if all dependencies are present; otherwise, return False.
     if (len(missing)):
-        return False
+        return False, missing
     else:
         return True
 
@@ -63,7 +66,7 @@ def parse(file):
 def main(argv):
     try:
         global debug
-        debug = 0
+        verbose = 0
 
         file = './paths.ini'
 
@@ -77,12 +80,12 @@ def main(argv):
         if args.file:
             file = args.file
         if args.verbose:
-            debug = args.verbose
-        if debug >= 1:
+            verbose = args.verbose
+        if verbose >= 1:
             print('Entering Main:')
 
-        value = parse(file)
-        return(value)
+        value, error = parse(file, verbose)
+        return value, error
 
     except IOError:
         sys.exit('Error: File ' + str(file) + ' does not exist.')
