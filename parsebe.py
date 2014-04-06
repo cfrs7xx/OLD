@@ -60,7 +60,8 @@ def parsing(input, output, stop, verbose):
     return True
 
 
-def main(): 
+#
+def main():
     try:
         global verbose
         verbose = 0
