@@ -1,6 +1,6 @@
 __author__ = 'tschlein'
 
-#Todo: Add exclusion list
+#Todo: Add HTML writer or equivalent
 
 import sys
 import argparse                 #http://docs.python.org/3.4/library/argparse.html
@@ -82,18 +82,20 @@ def parsing(input, output, stop, verbose):
 
             #Exclude reserved IPv4 addresses
             if reserved(line) == True:
+                #Search the exclusion list for domain names
                 if not bi_contains(stop_lines, line):
                     out_file.write(line)
                     if verbose >= 2:
                         print('accepted', line)
                 else:
-                    print('denied', line)
+                    if verbose >=2:
+                        print('denied', line)
 
     in_file.close()
     out_file.close()
     stop_file.close()
 
-    return True
+    return True, 'Write to output file complete.'
 
 
 #
