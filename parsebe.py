@@ -12,6 +12,20 @@ def bi_contains(lst, item):
     return (item <= lst[-1]) and (lst[bisect_left(lst, item)] == item)
 
 
+#Sort lines within input file and write to output file
+def sort_file(input, output):
+    f1 = open(input, 'r')
+    f2 = open(output, 'w+')
+
+    lines = f1.readlines()
+    lines = sorted(lines)
+
+    for line in lines:
+        f2.write(line)
+
+    f2.close()
+
+
 def parsing(input, output, stop, verbose):
     if verbose >= 1:
         print('|[+] Entering parser:')
@@ -46,7 +60,7 @@ def parsing(input, output, stop, verbose):
     return True
 
 
-def main(argv):
+def main():
     try:
         global verbose
         verbose = 0
@@ -76,5 +90,7 @@ def main(argv):
     except IOError:
         sys.exit('Error: File ' + str(file) + ' does not exist.')
 
+
 #Call main
-main(sys.argv[1:])
+if __name__ == '__main__':
+    main()
