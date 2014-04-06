@@ -4,6 +4,7 @@ __author__ = 'tschlein'
 
 import sys
 import argparse                 #http://docs.python.org/3.4/library/argparse.html
+import string
 from bisect import bisect_left
 
 #Source for this function:
@@ -26,6 +27,37 @@ def sort_file(input, output):
     f2.close()
 
 
+#Exclude reserved IPv4 addresses
+def reserved(line):
+    #RFC 1918
+    if line.startswith('10.') or line.startswith('192.168.'):
+        return False
+    elif line.startswith('172.'):
+        if int(line[4:6]) >= 12 and int(line[4:6]) <= 31:
+            return False
+
+    #RFC's 1700, 6890,
+    elif line.startswith('0.') or \
+        line.startswith('127.') or \
+        line.startswith('169.254') or \
+        line.startswith('192.0.2.') or \
+        line.startswith('192.88.99.') or \
+        line.startswith('192.18.') or \
+        line.startswith('192.19.') or \
+        line.startswith('192.51') or \
+        line.startswith('203.0.113'):
+            return False
+
+    elif line.startswith('2'):
+        test = line[0:3]
+        if test.isdigit():
+            if int(test) >= 224 and int(test) <= 255:
+                return False
+
+    else:
+        return True
+
+
 def parsing(input, output, stop, verbose):
     if verbose >= 1:
         print('|[+] Entering parser:')
@@ -39,6 +71,7 @@ def parsing(input, output, stop, verbose):
     lines = in_file.readlines()
     lines = sorted(lines)
 
+    #Stop file must be sorted alphabetically!
     stop_lines = stop_file.readlines()
 
     for line in lines:
@@ -47,15 +80,18 @@ def parsing(input, output, stop, verbose):
             #Split line with tab as delimiter, then remove first value in tuple (the count)
             line = line.split('\t')[1]
 
-            #if not bi_contains(stop_lines, line):
-            #    out_file.write(line)
-            #    if verbose >= 2:
-            #        print(line)
-            #else:
-            #    print('hi', line)
+            #Exclude reserved IPv4 addresses
+            if reserved(line) == True:
+                if not bi_contains(stop_lines, line):
+                    out_file.write(line)
+                    if verbose >= 2:
+                        print('accepted', line)
+                else:
+                    print('denied', line)
 
     in_file.close()
     out_file.close()
+    stop_file.close()
 
     return True
 
