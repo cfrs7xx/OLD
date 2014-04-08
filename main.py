@@ -1,4 +1,5 @@
 __author__ = 'khanta'
+__author__ = 'tschlein'
 #Calls all the main applications
 #Prints headers and footers
 #Bulk Path must not exist if so, it removes EVERYTHING
@@ -10,9 +11,16 @@ import datetime
 import be
 import shutil
 import regex
+import HTML
+import hashing
+import search
+import UnzipFile
+#from hashing import hashRecursive
 from sys import platform as _platform
+import HTMLWriter
 
-verbose = 0
+verbosity = 0
+debug = 0
 
 def IdentifyFile(filename):
     status = True
@@ -65,13 +73,14 @@ def Completed():
 
 def main(argv):
     #try:
-        global debug
-        md5 = False
+        global verbosity
+        config = '.\paths.ini'
         #parse the command-line arguments
         parser = argparse.ArgumentParser(description="Main program for MAFA.", add_help=True)
         parser.add_argument('-p', '--path', help='The output path for files.', required=True)
         parser.add_argument('-f', '--filename', help='The file to ingest.', required=True)
         parser.add_argument('-v', '--verbose', help='The level of debugging.', required=False)
+        parser.add_argument('-c', '--config', help='The config file to use.', required=False)
         parser.add_argument('--version', action='version', version='%(prog)s 1.5')
         args = parser.parse_args()
         if args.path:
@@ -82,9 +91,11 @@ def main(argv):
                 shutil.rmtree(path)
         if args.filename:
             filename = args.filename
+        if args.config:
+            config == args.config
         if args.verbose:
-            verbose = args.verbose
-            verbose = int(verbose)
+            verbosity = args.verbose
+            verbosity = int(verbosity)
         if _platform == "linux" or _platform == "linux2":
             oper = 'Linux'
         elif _platform == "darwin":
@@ -106,18 +117,38 @@ def main(argv):
         else:
             print('| [-] File Identified.                                                     |')
             Failed(error)
-        status, error = be.be_call(filename, path, oper)
+        status, error = hashing.hashFile(filename, verbosity)
+        if status:
+            print('| [+] Hashing File.                                                        |')
+        else:
+            print('| [-] Hashing File.                                                        |')
+            Failed(error)
+        status, error = UnzipFile.Unzip(filename, path)
+        if status:
+            print('| [+] File Unzipped.                                                       |')
+        else:
+            print('| [-] File Unzipped.                                                       |')
+            Failed(error)
+        #status, error = be.be_call(filename, 'c:\\temp\\bulk', oper)
         if status:
             print('| [+] Bulk Extractor Executed.                                             |')
         else:
             print('| [-] Bulk Extractor Executed.                                             |')
             Failed(error)
-        status, error = regex.SearchFiles(b'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', filename)
+        status, error = hashing.hashRecursive(path, verbosity)
         if status:
-            print('| [+] Bulk Extractor Executed.                                             |')
+            print('| [+] Hashing Files.                                                       |')
         else:
-            print('| [-] Bulk Extractor Executed.                                             |')
+            print('| [-] Hashing Files.                                                       |')
             Failed(error)
+
+        status, error = search.grepsearch('C:\\Users\\khanta\\Dropbox\\Git\\MAFA\\paths.ini', filename, path)
+        if status:
+            print('| [+] Searching Files        .                                             |')
+        else:
+            print('| [-] Searching Files        .                                             |')
+            Failed(error)
+        HTMLWriter.test()
         Completed()
 
 

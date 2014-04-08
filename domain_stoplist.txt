@@ -20,7 +20,8 @@ schemas.microsoft.com
 schemas.xmlsoap.org
 sgmetrics.cloudapp.net
 signup.live-int.com
-signup.live.comwww.apache.org
+signup.live.com
+www.apache.org
 www.ascc.net
 www.microsoft.com
 www.oasis-open.org

@@ -80,14 +80,13 @@ def caller(files, verbose):
 def hashFile(file, verbose):
     if verbose >= 1:
         print('[+] Entering hashing.hashFile: ')
-
     if os.path.isfile(file):
         #Declare list of files.
         files = []
         #add the file to the list
         files.append(file)
         caller(files, verbose)
-        return True
+        return True, ''
 
     else:
         error = '[-] File: ' + file + ' not found.'
@@ -109,7 +108,7 @@ def hashRecursive(path, verbose):
                 #add the files in the present directory to the list
                 files.append(os.path.join(root, filename))
         caller(files, verbose)
-        return True
+        return True, ''
 
     except IOError:
         error = '[-]: Path ' + str(path) + ' does not exist.'
@@ -145,4 +144,4 @@ def main(argv):
         sys.exit('Error: File ' + str(file) + ' does not exist.')
 
 #Call main
-main(sys.argv[1:])
+#main(sys.argv[1:])

@@ -1,0 +1,10 @@
++-------------------------------------------------------------------------------------------+
+|  References:                                                                              |
++-------------------------------------------------------------------------------------------+
+|                                                                                           |
+|  http://www.decalage.info/python/html#attachments                                         |
+|  https://github.com/simsong/bulk_extractor                                                |
+|  http://gnuwin32.sourceforge.net/packages/grep.htm                                        |
+|  https://docs.python.org/2/library/re.html                                                |
++-------------------------------------------------------------------------------------------+
+
