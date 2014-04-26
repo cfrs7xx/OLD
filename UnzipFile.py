@@ -8,7 +8,7 @@ import zipfile
 
 def Unzip(file, outputpath, debug):
     if debug >= 1:
-        print('Entering Unzip.')
+        print(' [+] Entering Unzip.')
     if debug >= 2:
         print('\tFilename passed in: ' + str(file))
         print('\tPath passed in: ' + str(outputpath))

@@ -98,7 +98,7 @@ def parsing(input, output, configfile, verbose):
                     if verbose >= 2:
                         print('accepted', line)
                 else:
-                    if verbose >=2:
+                    if verbose >= 2:
                         print('denied', line)
 
     in_file.close()

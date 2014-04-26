@@ -33,7 +33,6 @@ def be_call(filename, path, configfile, verbose):
         status = True
     else:
         status = False
-
     return status, error
 
 

@@ -70,7 +70,7 @@ def Header(outputpath, file):
     return data
 
 def Completed():
-    data = '| [*] Completed.\n\r'
+    data = '| [*] Completed.                                                            |\n\r'
     data += '+--------------------------------------------------------------------------+\n\r'
     print(data)
     return data
@@ -151,20 +151,21 @@ def main(argv):
             Failed(error)
         status, error = parsebe.parsing(path + 'domain_histogram.txt', path + 'd.txt', config, verbosity)
         if status:
-            print('| [+] Parsing Output                                                       |')
+            print('| [+] Parsing Output.                                                      |')
         else:
-            print('| [-] Parsing Output                                                       |')
+            print('| [-] Parsing Output.                                                      |')
             Failed(error)
         #input, output, configfile, verbose
         #status, error = reader.pcapsearch(config, 'C:\\TEMP\\dropbox1.pcap', path)
         status, error = search.grepsearch(path, filename, config, verbosity)
 
         if status:
-            print('| [+] Searching Files                                                      |')
+            print('| [+] Searching Files.                                                     |')
         else:
-            print('| [-] Searching Files                                                      |')
+            print('| [-] Searching Files.                                                     |')
             Failed(error)
         Completed()
+        HTMLWriter.htmlwrite('stop', '', path, '', '', config)
 
 
     #except:
