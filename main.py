@@ -131,13 +131,13 @@ def main(argv):
         else:
             print('| [-] Hashing File.                                                        |')
             Failed(error)
-        status, error = UnzipFile.Unzip(filename, path)
+        status, error = UnzipFile.Unzip(filename, path, verbosity)
         if status:
             print('| [+] File Unzipped.                                                       |')
         else:
             print('| [-] File Unzipped.                                                       |')
             Failed(error)
-        status, error = be.be_call(filename, path, config)
+        status, error = be.be_call(filename, path, config, verbosity)
         if status:
             print('| [+] Bulk Extractor Executed.                                             |')
         else:
