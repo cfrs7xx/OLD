@@ -11,7 +11,10 @@ import fnmatch				    #used for file matching
 import sys
 import hashlib
 import argparse                 #http://docs.python.org/3.4/library/argparse.html
-#from writer import htmlwrite
+import HTMLWriter
+filename = 'hashes.html'
+global path
+global config
 
 def md5(file):
     #define blocksize for reading file
@@ -46,8 +49,9 @@ def sha1(file):
 
 
 #Call the hashing functions
-def caller(files, verbose):
-    if verbose >= 1:
+def caller(files, r, verbose):
+    output = ''
+    if verbose >= 2:
         print('[+] Entering hashing.caller: ')
 
     #html_file = 'output.htm'
@@ -61,31 +65,39 @@ def caller(files, verbose):
         sha1_val = sha1(file)
 
         #if file has hash value, print to screen and to html file
-        if md5_val and verbose >= 2:
+        if md5_val:
             #print formatted output string: <filename> TAB <md5 hash> TAB <sha1 hash>
             output = file
             output += '\t'
             output += md5_val.hexdigest()
             output +='\t'
             output += sha1_val.hexdigest()
-            print(output)
+            #print(output)
 
             #Call HTML_Writing.py from here, sending the string
             #htmlwrite('data',output, html_file, 'null')
-
-    #htmlwrite('stop', 'null', html_file, 'null')
+    if r:
+        HTMLWriter.htmlwrite('external', output, path, 'hashes.html', "Recursive Hashes", config)
+    else:
+        HTMLWriter.htmlwrite('external', output, path, 'r_hashes.html', "Hash", config)
+            #method, data, path, ext_filename, ext_name, configfile
 
 
 #Hash a single file
-def hashFile(file, verbose):
-    if verbose >= 1:
+def hashFile(file, outputpath, configuration, verbose):
+    global path
+    global config
+    config = configuration
+    path = outputpath
+    r = False
+    if verbose >= 2:
         print('[+] Entering hashing.hashFile: ')
     if os.path.isfile(file):
         #Declare list of files.
         files = []
         #add the file to the list
         files.append(file)
-        caller(files, verbose)
+        caller(files, r, verbose)
         return True, ''
 
     else:
@@ -94,8 +106,13 @@ def hashFile(file, verbose):
 
 
 #Recursive hash
-def hashRecursive(path, verbose):
-    if verbose >= 1:
+def hashRecursive(inputpath, outputpath, configuration, verbose):
+    global path
+    global config
+    config = configuration
+    path = inputpath
+    r = True
+    if verbose >= 2:
         print('[+] Entering hashing.hashRecursive: ')
 
     #Declare list of files.
@@ -107,7 +124,7 @@ def hashRecursive(path, verbose):
             for filename in fnmatch.filter(filenames, '*.*'):		#can filter by file type, ex. *.apk
                 #add the files in the present directory to the list
                 files.append(os.path.join(root, filename))
-        caller(files, verbose)
+        caller(files, r, verbose)
         return True, ''
 
     except IOError:

@@ -3,18 +3,24 @@ __author__ = 'tschlein'
 
 from subprocess import call
 import os
+import configparser
+import platform
 
-def be_call(filename, path, oper):
+def be_call(filename, path, configfile):
     status = True
     error = ''
     logfile = ''
+    config = configparser.ConfigParser()
+    config.read(configfile)
+    system = platform.platform()
 
-    if oper == 'Windows':
+    if 'Windows' in system:
         logfile = 'c:\\temp\\log.txt'
-        bulkex = 'c:\\Program Files (x86)\\Bulk Extractor 1.4.1\\32-bit\\bulk_extractor.exe'
-    if oper == 'Linux':
+        bulkex = config.get('Windows', '32_Bulk')
+    elif 'Linux' in system:
+        for key in config['Linux']:
+            bulkex = config.get('Linux', 'bulk')
         logfile = '/tmp/log_file.txt'
-        bulkex = 'bulk_extractor.exe'
 
     #try:
     #with open('/tmp/log_file.txt', 'a') as log:

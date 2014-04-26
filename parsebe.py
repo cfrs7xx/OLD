@@ -6,6 +6,8 @@ import sys
 import argparse                 #http://docs.python.org/3.4/library/argparse.html
 import string
 from bisect import bisect_left
+import configparser
+import platform
 
 #Source for this function:
 # http://stackoverflow.com/questions/2701173/most-efficient-way-for-a-lookup-search-in-a-huge-list-python
@@ -58,10 +60,18 @@ def reserved(line):
         return True
 
 
-def parsing(input, output, stop, verbose):
-    if verbose >= 1:
+def parsing(input, output, configfile, verbose):
+    if verbose >= 2:
         print('|[+] Entering parser:')
-
+    system = platform.platform()
+    config = configparser.ConfigParser()
+    config.read(configfile)
+    if 'Windows' in system:
+        logfile = 'c:\\temp\\log.txt'
+        stop = config.get('Windows', 'stoplist')
+    if 'Linux' in system:
+        logfile = '/tmp/log_file.txt'
+        stop = config.get('Linux', 'stoplist')
     #Open input and output files
     in_file = open(input, 'r+')
     out_file = open(output, 'w+')

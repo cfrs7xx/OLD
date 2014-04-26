@@ -18,6 +18,7 @@ import UnzipFile
 #from hashing import hashRecursive
 from sys import platform as _platform
 import HTMLWriter
+import parsebe
 
 verbosity = 0
 debug = 0
@@ -53,28 +54,33 @@ def Failed(error):
     sys.exit(1)
 
 def Header(outputpath, file):
-    print('')
-    print('+--------------------------------------------------------------------------+')
-    print('|Mobile Application and Analysis Framework                                 |')
-    print('+---------------------------------------------------------------------------')
-    print('|Authors: Tahir Khan - tkhan9@gmu.edu / Tim Schleining - tschlein@gmu.edu  |')
-    print('+--------------------------------------------------------------------------+')
-    print('  Date Run: ' + str(datetime.datetime.now()))
-    print('+--------------------------------------------------------------------------+')
-    print('  Input File:   ' + str(file))
-    print('  Output Path:  ' + str(outputpath))
-    print('+--------------------------------------------------------------------------+')
+    data = ''
+    data += '+--------------------------------------------------------------------------+\n\r'
+    data += ''
+    data += 'Mobile Application and Analysis Framework\n\r'
+    data += '+---------------------------------------------------------------------------\n\r'
+    data += 'Authors: Tahir Khan/Tim Schleining\n\r'
+    data += '+--------------------------------------------------------------------------+\n\r'
+    data += '  Date Run: ' + str(datetime.datetime.now()) + '\n\r'
+    data += '+--------------------------------------------------------------------------+\n\r'
+    data += '  Input File:   ' + str(file) + '\n\r'
+    data += '  Output Path:  ' + str(outputpath) + '\n\r'
+    data += '+--------------------------------------------------------------------------+\n\r'
+    print(data)
+    return data
 
 def Completed():
-    print('| [*] Completed.                                                           |')
-    print('+--------------------------------------------------------------------------+')
-    sys.exit(0)
+    data = '| [*] Completed.\n\r'
+    data += '+--------------------------------------------------------------------------+\n\r'
+    print(data)
+    return data
 
 
 def main(argv):
     #try:
         global verbosity
-        config = '.\paths.ini'
+        report = 'report.html'
+        #config = '.\paths.ini'
         #parse the command-line arguments
         parser = argparse.ArgumentParser(description="Main program for MAFA.", add_help=True)
         parser.add_argument('-p', '--path', help='The output path for files.', required=True)
@@ -87,12 +93,12 @@ def main(argv):
             path = args.path
             if not os.path.exists(path):
                 os.makedirs(path)
-            else:
-                shutil.rmtree(path)
+            #else:
+             #   shutil.rmtree(path)
         if args.filename:
             filename = args.filename
         if args.config:
-            config == args.config
+            config = args.config
         if args.verbose:
             verbosity = args.verbose
             verbosity = int(verbosity)
@@ -109,15 +115,17 @@ def main(argv):
             #if (os == 'Windows'):
             #    print ('Error: System not supported.')
             #    sys.exit(1)
-        Header(path, filename)
-
+        header = Header(path, filename)
+        HTMLWriter.htmlwrite('start', '', path, '', '', config)
+        #htmlwrite(method, data, ext_filename, ext_name, configfile):
+        HTMLWriter.htmlwrite('header', header, path, '', '', config)
         fileype, status, error = IdentifyFile(filename)
         if status:
             print('| [+] File Identified.                                                     |')
         else:
             print('| [-] File Identified.                                                     |')
             Failed(error)
-        status, error = hashing.hashFile(filename, verbosity)
+        status, error = hashing.hashFile(filename, path, config, verbosity)
         if status:
             print('| [+] Hashing File.                                                        |')
         else:
@@ -129,26 +137,33 @@ def main(argv):
         else:
             print('| [-] File Unzipped.                                                       |')
             Failed(error)
-        #status, error = be.be_call(filename, 'c:\\temp\\bulk', oper)
+        status, error = be.be_call(filename, path, config)
         if status:
             print('| [+] Bulk Extractor Executed.                                             |')
         else:
             print('| [-] Bulk Extractor Executed.                                             |')
             Failed(error)
-        status, error = hashing.hashRecursive(path, verbosity)
+        status, error = hashing.hashRecursive(path, path, config, verbosity)
         if status:
             print('| [+] Hashing Files.                                                       |')
         else:
             print('| [-] Hashing Files.                                                       |')
             Failed(error)
-
-        status, error = search.grepsearch('C:\\Users\\khanta\\Dropbox\\Git\\MAFA\\paths.ini', filename, path)
+        status, error = parsebe.parsing(path + 'domain_histogram.txt', path + 'd.txt', config, verbosity)
         if status:
-            print('| [+] Searching Files        .                                             |')
+            print('| [+] Parsing Output                                                       |')
         else:
-            print('| [-] Searching Files        .                                             |')
+            print('| [-] Parsing Output                                                       |')
             Failed(error)
-        HTMLWriter.test()
+        #input, output, configfile, verbose
+        #status, error = reader.pcapsearch(config, 'C:\\TEMP\\dropbox1.pcap', path)
+        status, error = search.grepsearch(path, filename, config, verbosity)
+
+        if status:
+            print('| [+] Searching Files                                                      |')
+        else:
+            print('| [-] Searching Files                                                      |')
+            Failed(error)
         Completed()
 
 

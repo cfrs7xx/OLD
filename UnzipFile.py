@@ -1,6 +1,6 @@
 __author__ = 'khanta'
 
-debug = 2
+debug = 0
 
 import sys
 import os
