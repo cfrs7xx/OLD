@@ -36,7 +36,7 @@ def grepsearch(path, filename, configfile, verbosity): #path, filename, config, 
             #print ('Results for ' + str(key) + ': ' + str(out.decode("utf-8")))
             #(method, data, filename, ext_filename, ext_name):
             data += str(out)
-        HTMLWriter.htmlwrite('external', data, path, key + '-searches.html', key, config)
+        HTMLWriter.htmlwrite('external', data, path, key + '-searches.html', key, configfile)
         data = ''
         #print (data)
     #data1 =  data.split('\x00')

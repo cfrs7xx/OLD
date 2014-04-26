@@ -8,6 +8,7 @@ import string
 from bisect import bisect_left
 import configparser
 import platform
+import HTMLWriter
 
 #Source for this function:
 # http://stackoverflow.com/questions/2701173/most-efficient-way-for-a-lookup-search-in-a-huge-list-python
@@ -60,9 +61,10 @@ def reserved(line):
         return True
 
 
-def parsing(input, output, configfile, verbose):
+def parsing(path, input, output, configfile, verbose):
     if verbose >= 2:
         print('|[+] Entering parser:')
+    data = ''
     system = platform.platform()
     config = configparser.ConfigParser()
     config.read(configfile)
@@ -80,7 +82,8 @@ def parsing(input, output, configfile, verbose):
     #Read lines into memory and then sort (alphabetically)
     lines = in_file.readlines()
     lines = sorted(lines)
-
+    HTMLWriter.htmlwrite('external', lines, path, 'domain-results.html', 'Domains Found', configfile)
+    #method, data, path, ext_filename, ext_name, configfile
     #Stop file must be sorted alphabetically!
     stop_lines = stop_file.readlines()
 

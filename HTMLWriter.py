@@ -18,11 +18,12 @@ def htmlwrite(method, data, path, ext_filename, ext_name, configfile):
     config = configparser.ConfigParser()
 
     config.read(configfile)
-    config.read('C:\\Users\\khanta\\Dropbox\\Git\\MAFA\\paths.ini')
+    #config.read('C:\\Users\\khanta\\Dropbox\\Git\\MAFA\\paths.ini')
     filename = config.get('Reports', 'reportname')
     filename = path + '\\' + filename
     ext_filename = path + '\\' + ext_filename
-    data = data.replace('\n\r', '</br>')
+    if str(type(data)) != '<class \'list\'>':
+        data = data.replace('\n\r', '</br>')
     if method.lower() == 'start':
         with open(filename, 'w+') as output:
             output.write('<html>')
@@ -63,7 +64,7 @@ def htmlwrite(method, data, path, ext_filename, ext_name, configfile):
             output.write('<br>')
             output.write('<h3><center>' + "Start Time: " + str(datetime.datetime.now()) + '</center></h3>')
             output.write('<br>')
-            output.write(data)
+            output.write(str(data))
             output.write('<br>')
             output.write('<h3><center>' + "StopTime: " + str(datetime.datetime.now()) + '</center></h3>')
             output.write('</table>')

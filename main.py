@@ -70,7 +70,7 @@ def Header(outputpath, file):
     return data
 
 def Completed():
-    data = '| [*] Completed.                                                            |\n\r'
+    data = '| [*] Completed.                                                           |\n\r'
     data += '+--------------------------------------------------------------------------+\n\r'
     print(data)
     return data
@@ -149,7 +149,7 @@ def main(argv):
         else:
             print('| [-] Hashing Files.                                                       |')
             Failed(error)
-        status, error = parsebe.parsing(path + 'domain_histogram.txt', path + 'd.txt', config, verbosity)
+        status, error = parsebe.parsing(path, path + 'domain_histogram.txt', path + 'd.txt', config, verbosity)
         if status:
             print('| [+] Parsing Output.                                                      |')
         else:
